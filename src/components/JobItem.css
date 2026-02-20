@@ -1,0 +1,40 @@
+.job-card {
+  border: 1px solid #ddd;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  background: #fafafa2a;
+}
+
+.job-title {
+  margin-bottom: 10px;
+}
+
+.job-input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.job-button {
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.job-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.job-message {
+  margin-top: 8px;
+}
+
+.job-error {
+  color: red;
+}
+
+.job-success {
+  color: green;
+}

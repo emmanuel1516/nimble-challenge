@@ -1,35 +1,95 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import { getCandidateByEmail, getJobs } from "./api";
+import JobList from "./components/JobList";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [email, setEmail] = useState("");
+  const [candidate, setCandidate] = useState(null);
+  const [jobs, setJobs] = useState([]);
+  const canSubmit = Boolean(candidate?.uuid && candidate?.candidateId);
+
+  const [loadingCandidate, setLoadingCandidate] = useState(false);
+  const [loadingJobs, setLoadingJobs] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleGetCandidate() {
+    setError("");
+    setCandidate(null);
+
+    if (!email) {
+      setError("Ingresá tu email.");
+      return;
+    }
+
+    try {
+      setLoadingCandidate(true);
+      const data = await getCandidateByEmail(email);
+      setCandidate(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoadingCandidate(false);
+    }
+  }
+
+  useEffect(() => {
+    async function fetchJobs() {
+      try {
+        setLoadingJobs(true);
+        const data = await getJobs();
+        setJobs(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoadingJobs(false);
+      }
+    }
+
+    fetchJobs();
+  }, []);
 
   return (
-    <>
+    <div className="app-container">
+      <h1 className="app-title">Nimble Gravity Challenge</h1>
+
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <input
+          type="text"
+          placeholder="Ingresá tu email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="app-input"
+        />
+        <button
+          onClick={handleGetCandidate}
+          disabled={loadingCandidate}
+          className="app-button"
+        >
+          {loadingCandidate ? "Buscando..." : "Obtener datos"}
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+
+      {candidate && (
+        <p>
+          Candidato: {candidate.firstName} {candidate.lastName}
+        </p>
+      )}
+
+      {loadingJobs && <p>Cargando posiciones...</p>}
+      {error && <p className="app-error">{error}</p>}
+
+      {jobs.length > 0 && (
+        <JobList
+          jobs={jobs}
+          uuid={candidate?.uuid}
+          candidateId={candidate?.candidateId}
+          canSubmit={canSubmit}
+          submitDisabledReason="Primero obtene tus datos de candidato con el email."
+        />
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
