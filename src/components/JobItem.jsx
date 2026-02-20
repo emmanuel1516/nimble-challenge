@@ -2,7 +2,14 @@
 import { applyToJob } from "../api";
 import "./JobItem.css";
 
-function JobItem({ job, uuid, candidateId, canSubmit, submitDisabledReason }) {
+function JobItem({
+  job,
+  uuid,
+  candidateId,
+  applicationId,
+  canSubmit,
+  submitDisabledReason,
+}) {
   const [repoUrl, setRepoUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -29,6 +36,7 @@ function JobItem({ job, uuid, candidateId, canSubmit, submitDisabledReason }) {
 
       await applyToJob({
         uuid,
+        applicationId,
         jobId: job.id,
         candidateId,
         repoUrl,

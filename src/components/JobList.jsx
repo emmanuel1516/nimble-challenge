@@ -1,7 +1,14 @@
 import JobItem from "./JobItem";
 import "./JobList.css";
 
-function JobList({ jobs, uuid, candidateId, canSubmit, submitDisabledReason }) {
+function JobList({
+  jobs,
+  uuid,
+  candidateId,
+  applicationId,
+  canSubmit,
+  submitDisabledReason,
+}) {
   return (
     <div className="job-list">
       {jobs.map((job) => (
@@ -10,6 +17,7 @@ function JobList({ jobs, uuid, candidateId, canSubmit, submitDisabledReason }) {
           job={job}
           uuid={uuid}
           candidateId={candidateId}
+          applicationId={applicationId}
           canSubmit={canSubmit}
           submitDisabledReason={submitDisabledReason}
         />

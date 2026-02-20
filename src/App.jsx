@@ -7,7 +7,9 @@ function App() {
   const [email, setEmail] = useState("");
   const [candidate, setCandidate] = useState(null);
   const [jobs, setJobs] = useState([]);
-  const canSubmit = Boolean(candidate?.uuid && candidate?.candidateId);
+  const canSubmit = Boolean(
+    candidate?.uuid && candidate?.candidateId && candidate?.applicationId
+  );
 
   const [loadingCandidate, setLoadingCandidate] = useState(false);
   const [loadingJobs, setLoadingJobs] = useState(false);
@@ -84,6 +86,7 @@ function App() {
           jobs={jobs}
           uuid={candidate?.uuid}
           candidateId={candidate?.candidateId}
+          applicationId={candidate?.applicationId}
           canSubmit={canSubmit}
           submitDisabledReason="Primero obtene tus datos de candidato con el email."
         />
